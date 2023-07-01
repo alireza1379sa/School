@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Entities.Student>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<form asp-action="AssignClasses" asp-controller="Classes">
+    <label>Select a Student</label>
+    <br />
+    <select name="StudentId">
+        @foreach (var item in Model)
+        {
+            <option value="@item.Id">@item.FirstName @item.LastName    @item.FieldOfStudy</option>
+        }
+    </select>
+    <br />
+    <label>Select a class number</label>
+    <br />
+    <select name="ClassId">
+        @foreach (var item in ViewBag.Items)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+    </select>
+    <br />
+    <input type="submit" value="Assign" class="btn btn-success" />
+</form>
+
