@@ -46,6 +46,9 @@ namespace School_Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.HasIndex("Teacher_id");
 
                     b.ToTable("Classes");

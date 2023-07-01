@@ -10,7 +10,7 @@
     <select name="TeacherId">
         @foreach (var item in Model)
         {
-            <option value="@item.Id">@item.Name</option>
+            <option value="@item.Id">@item.Name  @item.Field</option>
         }
     </select>
     <br />

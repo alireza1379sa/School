@@ -29,6 +29,7 @@ namespace School_Core
             modelBuilder.Entity<Class>().HasMany(n => n.Students).WithMany(n => n.Classes).UsingEntity<ClassesStudent>();
             modelBuilder.Entity<ClassesStudent>().HasKey(n => n.Id);
             modelBuilder.Entity<ClassesStudent>().HasIndex(n => new { n.StudentId, n.ClassId }).IsUnique(true);
+            modelBuilder.Entity<Class>().HasIndex(n=>n.Name).IsUnique(true);
         }
     }
 }
