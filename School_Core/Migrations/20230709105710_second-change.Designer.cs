@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using School_Core;
 
@@ -11,9 +12,11 @@ using School_Core;
 namespace School_Core.Migrations
 {
     [DbContext(typeof(DB))]
-    partial class DBModelSnapshot : ModelSnapshot
+    [Migration("20230709105710_second-change")]
+    partial class secondchange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,7 +103,6 @@ namespace School_Core.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Major")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -164,36 +166,17 @@ namespace School_Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<int>("UserTitle_id")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserTitle_id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("School_Core.Models.UserTitle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserTitle");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Entities.Class", b =>
@@ -242,17 +225,6 @@ namespace School_Core.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("School_Core.Models.User", b =>
-                {
-                    b.HasOne("School_Core.Models.UserTitle", "UserTitle")
-                        .WithMany("Users")
-                        .HasForeignKey("UserTitle_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserTitle");
-                });
-
             modelBuilder.Entity("Entities.Teacher", b =>
                 {
                     b.Navigation("Classes");
@@ -263,11 +235,6 @@ namespace School_Core.Migrations
                     b.Navigation("Student");
 
                     b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("School_Core.Models.UserTitle", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

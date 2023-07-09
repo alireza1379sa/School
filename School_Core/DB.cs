@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using School_Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace School_Core
         public DbSet<Teacher> Teachers { get; set; }
 
         public DbSet<Student> Students { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
         public DbSet<ClassesStudent> ClassesStudents { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using School_Core.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,8 +26,9 @@ namespace Entities
 
 
         [DataType(dataType:DataType.Date)]
-        public DateTime Date { get; set; } 
+        public DateTime Date { get; set; }
 
+        [Time]
         public TimeSpan Time { get; set; }
 
         [ForeignKey("Teacher")]

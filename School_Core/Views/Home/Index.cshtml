@@ -1,19 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model School_Core.ViewModels.UserLogin
+
+@{
+    ViewData["Title"] = "Index";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Index</h1>
 
-<div style="display:flex;justify-content:center">
-    <div style="height:600px;display:flex;justify-content:center;flex-flow:column" class="col-lg-6">
-        <a asp-action="Index" asp-controller="Students" class="btn btn-secondary btn-lg">Students Page</a>
-        <a asp-action="Index" asp-controller="Teachers" class="btn btn-secondary btn-lg">Teachers Page</a>
-        <a asp-action="Index" asp-controller="Classes" class="btn btn-secondary btn-lg">Classes Page</a>
-        <a asp-action="AssignTeacher" asp-controller="Teachers" class="btn btn-secondary btn-lg">Assign a teacher to class</a>
-        <a asp-action="AssignClasses" asp-controller="Classes" class="btn btn-secondary btn-lg">Assign Classes to Students</a>
+<h4>UserLogin</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+                <br />
+                <span class="text-danger">@ViewBag.Error</span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
 </div>
-
