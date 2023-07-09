@@ -6,37 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Entities;
-using School_Core;
+using School_Core.Services;
 
-namespace School_Core.Controllers
+namespace School_Core.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class StudentsController : Controller
     {
-        private readonly DB _context;
-
-        public StudentsController(DB context)
+        private readonly StudentRepository _studentRepository;
+        public StudentsController(StudentRepository studentRepository)
         {
-            _context = context;
+            _studentRepository = studentRepository;
         }
 
         // GET: Students
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return _context.Students != null ? 
-                          View(await _context.Students.ToListAsync()) :
-                          Problem("Entity set 'DB.Students'  is null.");
+            return _studentRepository.GetAll() != null ?
+                        View(_studentRepository.GetAll()) :
+                        Problem("Entity set 'DB.Students'  is null.");
         }
 
         // GET: Students/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null || _context.Students == null)
+            if (id == null || _studentRepository.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var student = await _context.Students
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var student = _studentRepository.GetById(id.Value);
             if (student == null)
             {
                 return NotFound();
@@ -56,26 +55,26 @@ namespace School_Core.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,FieldOfStudy,Age")] Student student)
+        public IActionResult Create([Bind("Id,FirstName,LastName,Major,Age,NationalCode")] Student student)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(student);
-                await _context.SaveChangesAsync();
+                _studentRepository.Insert(student);
+                _studentRepository.Save();
                 return RedirectToAction(nameof(Index));
             }
             return View(student);
         }
 
         // GET: Students/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
-            if (id == null || _context.Students == null)
+            if (id == null || _studentRepository.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var student = await _context.Students.FindAsync(id);
+            var student = _studentRepository.GetById(id.Value);
             if (student == null)
             {
                 return NotFound();
@@ -88,7 +87,7 @@ namespace School_Core.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,FieldOfStudy,Age")] Student student)
+        public IActionResult Edit(int id, [Bind("Id,FirstName,LastName,Major,Age,NationalCode")] Student student)
         {
             if (id != student.Id)
             {
@@ -99,19 +98,12 @@ namespace School_Core.Controllers
             {
                 try
                 {
-                    _context.Update(student);
-                    await _context.SaveChangesAsync();
+                    _studentRepository.Update(student);
+                    _studentRepository.Save();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!StudentExists(student.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw ex;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -119,15 +111,14 @@ namespace School_Core.Controllers
         }
 
         // GET: Students/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
-            if (id == null || _context.Students == null)
+            if (id == null || _studentRepository.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var student = await _context.Students
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var student = _studentRepository.GetById(id.Value);
             if (student == null)
             {
                 return NotFound();
@@ -139,25 +130,15 @@ namespace School_Core.Controllers
         // POST: Students/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            if (_context.Students == null)
+            if (_studentRepository.GetAll() == null)
             {
                 return Problem("Entity set 'DB.Students'  is null.");
             }
-            var student = await _context.Students.FindAsync(id);
-            if (student != null)
-            {
-                _context.Students.Remove(student);
-            }
-            
-            await _context.SaveChangesAsync();
+            _studentRepository.Delete(id);
+            _studentRepository.Save();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool StudentExists(int id)
-        {
-          return (_context.Students?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

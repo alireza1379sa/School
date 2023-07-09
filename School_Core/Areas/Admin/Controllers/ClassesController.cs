@@ -6,37 +6,41 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Entities;
-using School_Core;
+using School_Core.Services;
 
-namespace School_Core.Controllers
+namespace School_Core.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class ClassesController : Controller
     {
-        private readonly DB _context;
+        private readonly ClassesRepository _classesRepository;
 
-        public ClassesController(DB context)
+        private readonly StudentRepository _studentRepository;
+
+        private readonly ClassesStudentRepository _classesStudentRepository;
+
+        public ClassesController(ClassesRepository classesRepository, StudentRepository studentRepository, ClassesStudentRepository classesStudentRepository)
         {
-            _context = context;
+            _classesRepository = classesRepository;
+            _studentRepository = studentRepository;
+            _classesStudentRepository = classesStudentRepository;
         }
 
         // GET: Classes
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var dB = _context.Classes.Include(n => n.Teacher);
-            return View(await dB.ToListAsync());
+            return View(_classesRepository.GetAll());
         }
 
         // GET: Classes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null || _context.Classes == null)
+            if (id == null || _classesRepository.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var nclass = await _context.Classes
-                .Include(n => n.Teacher)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var nclass = _classesRepository.GetById(id.Value);
             if (nclass == null)
             {
                 return NotFound();
@@ -56,26 +60,26 @@ namespace School_Core.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Date,Time")] Class nclass)
+        public IActionResult Create([Bind("Id,Name,Date,Time")] Class nclass)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(nclass);
-                await _context.SaveChangesAsync();
+                _classesRepository.Insert(nclass);
+                _classesRepository.Save();
                 return RedirectToAction(nameof(Index));
             }
             return View(nclass);
         }
 
         // GET: Classes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
-            if (id == null || _context.Classes == null)
+            if (id == null || _classesRepository.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var nclass = await _context.Classes.FindAsync(id);
+            var nclass = _classesRepository.GetById(id.Value);
             if (nclass == null)
             {
                 return NotFound();
@@ -88,7 +92,7 @@ namespace School_Core.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date,Time")] Class nclass)
+        public IActionResult Edit(int id, [Bind("Id,Name,Date,Time")] Class nclass)
         {
             if (id != nclass.Id)
             {
@@ -99,19 +103,12 @@ namespace School_Core.Controllers
             {
                 try
                 {
-                    _context.Update(nclass);
-                    await _context.SaveChangesAsync();
+                    _classesRepository.Update(nclass);
+                    _classesRepository.Save();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!ClassExists(nclass.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw ex;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -119,16 +116,14 @@ namespace School_Core.Controllers
         }
 
         // GET: Classes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
-            if (id == null || _context.Classes == null)
+            if (id == null || _classesRepository.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var nclass = await _context.Classes
-                .Include(n => n.Teacher)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var nclass = _classesRepository.GetById(id.Value);
             if (nclass == null)
             {
                 return NotFound();
@@ -140,27 +135,22 @@ namespace School_Core.Controllers
         // POST: Classes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            if (_context.Classes == null)
+            if (_classesRepository.GetAll() == null)
             {
                 return Problem("Entity set 'DB.Classes'  is null.");
             }
-            var nclass = await _context.Classes.FindAsync(id);
-            if (nclass != null)
-            {
-                _context.Classes.Remove(nclass);
-            }
-
-            await _context.SaveChangesAsync();
+            _classesRepository.Delete(id);
+            _classesRepository.Save();
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public IActionResult AssignClasses()
         {
-            ViewBag.Items = _context.Classes;
-            return View(_context.Students);
+            ViewBag.Items = _classesRepository.GetAll();
+            return View(_studentRepository.GetAll());
         }
 
         [HttpPost]
@@ -168,17 +158,13 @@ namespace School_Core.Controllers
         {
             ClassesStudent classesStudent = new ClassesStudent()
             {
-                StudentId= StudentId,
-                ClassId= ClassId
+                StudentId = StudentId,
+                ClassId = ClassId
             };
-            _context.ClassesStudents.Add(classesStudent);
-            _context.SaveChanges();
-            return Redirect("/Home/index");
+            _classesStudentRepository.Insert(classesStudent);
+            _classesStudentRepository.Save();
+            return Redirect("/Admin/Home/index");
         }
 
-        private bool ClassExists(int id)
-        {
-            return (_context.Classes?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
     }
 }
