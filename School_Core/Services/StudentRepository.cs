@@ -4,7 +4,7 @@ using School_Core.ViewModels;
 
 namespace School_Core.Services
 {
-    public class StudentRepository : GenericRepository<Student>, IDisposable
+    public class StudentRepository : GenericRepository<Student>, IDisposable, IStudentRepository
     {
         private readonly DB db;
         public StudentRepository(DB db) : base(db)
@@ -28,6 +28,14 @@ namespace School_Core.Services
                              TeacherName = z.Name!,
                          };
             return result;
+        }
+
+        public void AssignMark(int id, int mark)
+        {
+            Student res = GetById(id);
+            res.Mark = mark;
+            Update(res);
+            Save();
         }
     }
 }

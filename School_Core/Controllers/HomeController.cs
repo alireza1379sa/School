@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using School_Core.Models;
+using School_Core.Repositories;
 using School_Core.Services;
 using School_Core.ViewModels;
 using System.Diagnostics;
@@ -9,8 +10,8 @@ namespace School_Core.Controllers
     public class HomeController : Controller
     {
 
-        private readonly UserRepository _userRepository;
-        public HomeController(UserRepository userRepository)
+        private readonly IUserRepository _userRepository;
+        public HomeController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
@@ -51,10 +52,6 @@ namespace School_Core.Controllers
             return View(userLogin);
         }
 
-        public IActionResult Profile(User user)
-        {
-            return View("Profile", user);
-        }
 
         public IActionResult Privacy()
         {

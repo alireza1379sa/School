@@ -4,7 +4,7 @@ using School_Core.Repositories;
 
 namespace School_Core.Services
 {
-    public class UserRepository:GenericRepository<User>
+    public class UserRepository:GenericRepository<User>,IUserRepository
     {
         private readonly DB db;
         public UserRepository(DB db) : base(db)

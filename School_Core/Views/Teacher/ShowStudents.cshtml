@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Entities.Student>
+
+@{
+    ViewData["Title"] = "ShowStudents";
+}
+
+<h1>ShowStudents</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Major)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mark)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Major)
+                </td>
+                <td>
+                    @item.Mark
+                </td>
+                <td>
+                    <a asp-action="AssignMark" asp-controller="Teacher" asp-route-id="@item.Id" class="btn btn-primary">Assign Mark</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

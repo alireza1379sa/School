@@ -1,0 +1,30 @@
+﻿@model List<Entities.Class>
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h1>@ViewBag.UserName</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ClassName</th>
+            <th>Date</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Date
+                </td>
+                <td>
+                    <a asp-action="ShowStudents" asp-controller="Teacher" class="btn btn-primary" asp-route-id= "@item.Id">Show</a>
+                </td>
+            </tr>
+        }
+    </thead>
+   
+</table>
