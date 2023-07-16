@@ -31,9 +31,14 @@ namespace School_Core.Services
             return db.Users.Include(n => n.UserTitle).Single(n => n.UserName == username)!;
         }
 
-        public User UserIncludeStudent(User user)
+        public User UserIncludeStudent(int id)
         {
-            return db.Users.Include(n=>n.Student).Single(n=>n.UserName== user.UserName);
+            return db.Users.Include(n=>n.Student).Single(n=>n.Id==id);
+        }
+
+        public User UserIncludeTeacher(int id)
+        {
+            return db.Users.Include(n => n.Teacher).Single(n => n.Id == id);
         }
     }
 }

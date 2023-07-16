@@ -18,7 +18,7 @@ namespace School_Core.Controllers
         public IActionResult Profile(User user)
         {
             ViewBag.UserName = user.UserName;
-            user = _userRepository.UserIncludeStudent(user);
+            user = _userRepository.UserIncludeStudent(user.Id);
             return View(_studentRepository.GetWeeklySchedules(user.Student!.Id));
         }
     }
