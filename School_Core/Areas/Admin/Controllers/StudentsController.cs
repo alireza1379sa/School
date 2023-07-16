@@ -20,6 +20,7 @@ namespace School_Core.Areas.Admin.Controllers
         }
 
         // GET: Students
+
         public IActionResult Index()
         {
             return _studentRepository.GetAll() != null ?

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<School_Core.ViewModels.WeeklySchedule>
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h1>@ViewBag.UserName</h1>
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ClassName
+            </th>
+            <th>
+                Time
+            </th>
+            <th>
+                DayOfWeek
+            </th>
+            <th>
+                TeacherName
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ClassName</td>
+                <td>@item.Time</td>
+                <td>@item.DayOfWeek</td>
+                <td>@item.TeacherName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
