@@ -2,7 +2,7 @@
 using School_Core.Repositories;
 namespace School_Core.Services
 {
-    public class ClassesRepository : GenericRepository<Class>
+    public class ClassesRepository : GenericRepository<Class>,IClassesRepository
     {
         private readonly DB db;
         public ClassesRepository(DB db) : base(db)
@@ -24,6 +24,7 @@ namespace School_Core.Services
                           Age = student.Age,
                           LastName = student.LastName,
                           Major = student.Major,
+                          Mark= student.Mark,
                       };
             return res;
         }

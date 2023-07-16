@@ -37,6 +37,8 @@ namespace Entities
 
         public int Age { get; set; }
 
+        public Nullable<int> Mark { get; set; }
+
         public List<Class> Classes { get; set; }
 
         [ForeignKey("User")]

@@ -13,11 +13,11 @@ namespace School_Core
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<StudentRepository, StudentRepository>();
-            builder.Services.AddScoped<TeacherRepository, TeacherRepository>();
-            builder.Services.AddScoped<ClassesRepository, ClassesRepository>();
-            builder.Services.AddScoped<ClassesStudentRepository, ClassesStudentRepository>();
-            builder.Services.AddScoped<UserRepository, UserRepository>();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+            builder.Services.AddScoped<IClassesRepository, ClassesRepository>();
+            builder.Services.AddScoped<IClassesStudentRepository, ClassesStudentRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddDbContext<DB>(option =>
             {
                 option.UseSqlServer(@"Server=.\SQL2016;Database=Schoo_Core;Trusted_Connection=True;TrustServerCertificate=True");
@@ -51,14 +51,6 @@ namespace School_Core
             });
 #pragma warning restore
 
-            //app.MapControllerRoute(
-            //    name: "default",
-            //    pattern: "{controller=Home}/{action=Index}/{id?}");
-            //app.MapAreaControllerRoute(
-            //    name: "Admin",
-            //    areaName: "Admin",
-            //    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-            //    );
 
             app.Run();
         }

@@ -7,19 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Entities;
 using School_Core.Services;
+using School_Core.Repositories;
 
 namespace School_Core.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class ClassesController : Controller
     {
-        private readonly ClassesRepository _classesRepository;
+        private readonly IClassesRepository _classesRepository;
 
-        private readonly StudentRepository _studentRepository;
+        private readonly IStudentRepository _studentRepository;
 
-        private readonly ClassesStudentRepository _classesStudentRepository;
+        private readonly IClassesStudentRepository _classesStudentRepository;
 
-        public ClassesController(ClassesRepository classesRepository, StudentRepository studentRepository, ClassesStudentRepository classesStudentRepository)
+        public ClassesController(IClassesRepository classesRepository, IStudentRepository studentRepository, IClassesStudentRepository classesStudentRepository)
         {
             _classesRepository = classesRepository;
             _studentRepository = studentRepository;

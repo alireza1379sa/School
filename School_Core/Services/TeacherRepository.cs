@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using School_Core.Repositories;
 namespace School_Core.Services
 {
-    public class TeacherRepository : GenericRepository<Teacher>
+    public class TeacherRepository : GenericRepository<Teacher>,ITeacherRepository
     {
         private readonly DB _db;
         public TeacherRepository(DB db) : base(db)
