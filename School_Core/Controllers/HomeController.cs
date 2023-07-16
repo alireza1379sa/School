@@ -39,7 +39,7 @@ namespace School_Core.Controllers
                     }
                     else if (user.UserTitle.Title == "Teacher")
                     {
-                        return RedirectToAction("Profile", "Home", user);
+                        return RedirectToAction("Profile", "Teacher", user);
                     }
                 }
                 else
