@@ -27,6 +27,8 @@ namespace School_Core
 
         public DbSet<ClassesStudent> ClassesStudents { get; set; }
 
+        public DbSet<UserTitle> UserTitle { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Class>().HasMany(n => n.Students).WithMany(n => n.Classes).UsingEntity<ClassesStudent>();

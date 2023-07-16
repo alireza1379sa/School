@@ -7,8 +7,7 @@ namespace School_Core.Services
     public class UserRepository:GenericRepository<User>
     {
         private readonly DB db;
-
-        public UserRepository(DB db):base(db)
+        public UserRepository(DB db) : base(db)
         {
             this.db = db;
         }
@@ -28,7 +27,13 @@ namespace School_Core.Services
 
         public User GetUserByUsername(string username)
         {
-            return db.Users.Include(n=>n.UserTitle).SingleOrDefault(n=>n.UserName==username)!;
+
+            return db.Users.Include(n => n.UserTitle).Single(n => n.UserName == username)!;
+        }
+
+        public User UserIncludeStudent(User user)
+        {
+            return db.Users.Include(n=>n.Student).Single(n=>n.UserName== user.UserName);
         }
     }
 }

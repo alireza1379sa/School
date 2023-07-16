@@ -12,7 +12,7 @@ namespace School_Core.Controllers
         private readonly UserRepository _userRepository;
         public HomeController(UserRepository userRepository)
         {
-            _userRepository= userRepository;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
@@ -24,22 +24,22 @@ namespace School_Core.Controllers
         [HttpPost]
         public IActionResult Index(UserLogin userLogin)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 if (_userRepository.IsExist(userLogin.UserName))
                 {
-                    User user=_userRepository.GetUserByUsername(userLogin.UserName);
+                    User user = _userRepository.GetUserByUsername(userLogin.UserName);
                     if (user.UserTitle!.Title == "Admin")
                     {
-                       return Redirect("/Admin/Home/Index");
+                        return Redirect("/Admin/Home/Index");
                     }
                     else if (user.UserTitle.Title == "Student")
                     {
-                        return RedirectToAction("Profile", "Home",user);
+                        return RedirectToAction("Profile", "Student", user);
                     }
                     else if (user.UserTitle.Title == "Teacher")
                     {
-                        return RedirectToAction("Profile", "Home",user);
+                        return RedirectToAction("Profile", "Home", user);
                     }
                 }
                 else
@@ -47,13 +47,13 @@ namespace School_Core.Controllers
                     ViewBag.Error = "کاربر مورد نطر یافت نشد";
                 }
             }
-            
+
             return View(userLogin);
         }
 
         public IActionResult Profile(User user)
         {
-            return View("Profile",user);
+            return View("Profile", user);
         }
 
         public IActionResult Privacy()
