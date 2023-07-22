@@ -1,4 +1,5 @@
-﻿using School_Core.Models;
+﻿using School_Core.Attributes;
+using School_Core.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -30,6 +31,10 @@ namespace Entities
         [StringLength(11)]
         [PhoneMask("09999999999")]
         public string PhoneNumber { get; set; } = "";
+
+        [StringLength(10)]
+        [NationalCode]
+        public string NationalCode { get; set; } = "";
 
         public List<Class> Classes { get; set; }
 

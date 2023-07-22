@@ -7,6 +7,10 @@ namespace School_Core.Repositories
     {
         IEnumerable<WeeklySchedule> GetWeeklySchedules(int id);
 
-        void AssignMark(int id, int mark);
+        void AssignMark(Student student);
+
+        bool ExistStudentByCode(string code);
+
+        Student FindStudentByCode(string code);
     }
 }

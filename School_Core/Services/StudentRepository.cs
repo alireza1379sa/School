@@ -30,12 +30,20 @@ namespace School_Core.Services
             return result;
         }
 
-        public void AssignMark(int id, int mark)
+        public void AssignMark(Student student)
         {
-            Student res = GetById(id);
-            res.Mark = mark;
-            Update(res);
+            Update(student);
             Save();
+        }
+
+        public bool ExistStudentByCode(string code)
+        {
+            return db.Students.Any(n => n.NationalCode == code);
+        }
+
+        public Student FindStudentByCode(string code)
+        {
+            return db.Students.Single(n => n.NationalCode == code);
         }
     }
 }

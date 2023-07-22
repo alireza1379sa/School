@@ -1,20 +1,23 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using School_Core.Models;
 using School_Core.Repositories;
 using School_Core.Services;
+using System.Linq;
 
 namespace School_Core.Controllers
 {
+    [Authorize]
     public class TeacherController : Controller
     {
         private readonly IUserRepository _userRepository;
 
         private readonly ITeacherRepository _teacherRepository;
 
-        private readonly IClassesRepository  _classesRepository;
+        private readonly IClassesRepository _classesRepository;
 
-        private readonly IStudentRepository  _studentRepository;
+        private readonly IStudentRepository _studentRepository;
         public TeacherController(IUserRepository userRepository, ITeacherRepository teacherRepository, IClassesRepository classesRepository, IStudentRepository studentRepository)
         {
             _userRepository = userRepository;
@@ -22,11 +25,20 @@ namespace School_Core.Controllers
             _classesRepository = classesRepository;
             _studentRepository = studentRepository;
         }
-        public IActionResult Profile(User user)
+
+        public IActionResult Profile()
         {
-            ViewBag.UserName = user.UserName;
-            User myUser = _userRepository.UserIncludeTeacher(user.Id);
-            return View(_teacherRepository.GetClasses(myUser.Teacher!.Id));
+            ViewBag.UserName = User.Identity!.Name;
+            User myUser = _userRepository.UserIncludeTeacher(int.Parse(User.Claims.First().Value));
+            if (myUser.Teacher != null)
+            {
+                return View(_teacherRepository.GetClasses(myUser.Teacher!.Id));
+            }
+            else
+            {
+                return Redirect("Account/Logout");
+            }
+            
         }
 
         public IActionResult ShowStudents(int id)
@@ -34,23 +46,21 @@ namespace School_Core.Controllers
             return View(_classesRepository.GetStudents(id));
         }
 
+        [HttpGet]
         public IActionResult AssignMark(int id)
         {
-            ViewBag.Id = id;
-            return View();
+            return View(_studentRepository.GetById(id));
         }
 
         [HttpPost]
-        public IActionResult AssignMark(int id,int mark)
+        public IActionResult AssignMark(Student student)
         {
-            int i = id;
-            int m = mark;
             if (ModelState.IsValid)
             {
-                _studentRepository.AssignMark(id, mark);
-                return Redirect("/home/index");
+                _studentRepository.AssignMark(student);
+                return RedirectToAction("Profile", "Teacher");
             }
-            return View(_studentRepository.GetById(id));
+            return View(student);
         }
     }
 }

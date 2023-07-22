@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Entities;
 using School_Core.Services;
 using School_Core.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace School_Core.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class ClassesController : Controller
     {
         private readonly IClassesRepository _classesRepository;

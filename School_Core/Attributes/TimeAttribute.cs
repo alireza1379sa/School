@@ -2,6 +2,7 @@
 
 namespace School_Core.Attributes
 {
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class TimeAttribute: ValidationAttribute
     {
         private readonly TimeSpan begin=new TimeSpan(hours:8,minutes:0, seconds:0);

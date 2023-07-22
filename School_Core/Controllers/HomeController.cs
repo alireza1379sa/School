@@ -16,43 +16,39 @@ namespace School_Core.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet]
         public IActionResult Index()
         {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Index(UserLogin userLogin)
-        {
-            if (ModelState.IsValid)
+            if (User.Identity!.IsAuthenticated)
             {
-                if (_userRepository.IsExist(userLogin.UserName))
+                User user = _userRepository.FindUserById(int.Parse(User.Claims.First().Value));
+                if (user.UserTitle!.Title == "Admin")
                 {
-                    User user = _userRepository.GetUserByUsername(userLogin.UserName);
-                    if (user.UserTitle!.Title == "Admin")
-                    {
-                        return Redirect("/Admin/Home/Index");
-                    }
-                    else if (user.UserTitle.Title == "Student")
-                    {
-                        return RedirectToAction("Profile", "Student", user);
-                    }
-                    else if (user.UserTitle.Title == "Teacher")
-                    {
-                        return RedirectToAction("Profile", "Teacher", user);
-                    }
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+                }
+                else if (user.UserTitle.Title == "Teacher")
+                {
+                    return RedirectToAction("Profile", "Teacher");
+                }
+                else if (user.UserTitle.Title == "Student")
+                {
+                    return RedirectToAction("Profile", "Student");
                 }
                 else
                 {
-                    ViewBag.Error = "کاربر مورد نطر یافت نشد";
+                    return Redirect("/Account/Login");
                 }
             }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
-            return View(userLogin);
         }
 
-
+        public IActionResult NotAvailable()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
