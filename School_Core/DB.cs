@@ -35,6 +35,8 @@ namespace School_Core
             modelBuilder.Entity<ClassesStudent>().HasKey(n => n.Id);
             modelBuilder.Entity<ClassesStudent>().HasIndex(n => new { n.StudentId, n.ClassId }).IsUnique(true);
             modelBuilder.Entity<Class>().HasIndex(n=>n.Name).IsUnique(true);
+            modelBuilder.Entity<Student>().HasIndex(n=>n.NationalCode).IsUnique(true);
+            modelBuilder.Entity<Teacher>().HasIndex(n => n.NationalCode).IsUnique(true);
         }
     }
 }

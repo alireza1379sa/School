@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace School_Core.Attributes
 {
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class NationalCode:ValidationAttribute
     {
         Regex regex = new Regex("[^0-9]+");

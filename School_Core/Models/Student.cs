@@ -37,7 +37,8 @@ namespace Entities
 
         public int Age { get; set; }
 
-        public Nullable<int> Mark { get; set; }
+        [MarkValidation(0,20,ErrorMessage ="Please enter valid data")]
+        public int Mark { get; set; }
 
         public List<Class> Classes { get; set; }
 

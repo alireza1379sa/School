@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using School_Core.MiddleWare;
 using School_Core.Repositories;
 using School_Core.Services;
 
@@ -22,6 +24,13 @@ namespace School_Core
             {
                 option.UseSqlServer(@"Server=.\SQL2016;Database=Schoo_Core;Trusted_Connection=True;TrustServerCertificate=True");
             });
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(option =>
+               {
+                   option.LoginPath = "/Account/Login";
+                   option.LogoutPath = "/Account/Logout";
+                   option.ExpireTimeSpan = TimeSpan.FromDays(30);
+               });
 
             var app = builder.Build();
 
@@ -32,11 +41,13 @@ namespace School_Core
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseStatusCodePagesWithRedirects("/Home/NotAvailable");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<RoleMiddleWare>();
 #pragma warning disable
             app.UseEndpoints(endpoints =>
             {
@@ -49,10 +60,11 @@ namespace School_Core
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+ 
 #pragma warning restore
 
 
             app.Run();
         }
-}
+    }
 }

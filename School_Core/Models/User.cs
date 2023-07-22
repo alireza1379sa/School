@@ -13,6 +13,10 @@ namespace School_Core.Models
         [StringLength(150)]
         public string UserName { get; set; } = "";
 
+        [Required]
+        [StringLength(100)]
+        public string Password { get; set; } = "";
+
         public Teacher? Teacher { get; set; }
 
         public Student? Student { get; set; }

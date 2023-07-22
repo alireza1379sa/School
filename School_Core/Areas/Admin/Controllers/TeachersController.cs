@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Entities;
 using School_Core.Services;
 using School_Core.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace School_Core.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class TeachersController : Controller
     {
         private readonly ITeacherRepository _teacherRepository;
@@ -60,7 +62,7 @@ namespace School_Core.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,Name,Field,PhoneNumber")] Teacher teacher)
+        public IActionResult Create([Bind("Id,Name,Field,PhoneNumber,NationalCode")] Teacher teacher)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +94,7 @@ namespace School_Core.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Name,Field,PhoneNumber")] Teacher teacher)
+        public IActionResult Edit(int id, [Bind("Id,Name,Field,PhoneNumber,NationalCode")] Teacher teacher)
         {
             if (id != teacher.Id)
             {

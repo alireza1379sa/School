@@ -2,14 +2,18 @@
 
 namespace School_Core.Repositories
 {
-    public interface IUserRepository:IRepositoryManager<User>
+    public interface IUserRepository : IRepositoryManager<User>
     {
         bool IsExist(string username);
-
-        User GetUserByUsername(string username);
 
         User UserIncludeStudent(int id);
 
         User UserIncludeTeacher(int id);
+
+        int FindUserTitleId(string title);
+
+        User GetUserForLogin(string username, string password);
+
+        User FindUserById(int id);
     }
 }
